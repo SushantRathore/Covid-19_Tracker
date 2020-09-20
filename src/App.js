@@ -5,6 +5,8 @@ import Map from './Map';
 import Table from'./Table'
 import './App.css';
 import { sortData } from './util';
+import LineGraph  from "./LineGraph";
+import "leaflet/dist/leaflet.css";
 
 function App() {
 
@@ -12,6 +14,8 @@ function App() {
   const [country,setcountry]= useState('worldwide');
   const [countryInfo , setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
+  const [mapCenter, setMapCenter] =  useState({lat : 34.80746 , lng : -40.4790});
+  const [mapZoom , setMapZoom] = useState(3);
 
 
   useEffect (() => {
@@ -55,6 +59,9 @@ getCountriesData();
     .then(data => {
         setcountry(countryCode);
         setCountryInfo(data);
+
+        setMapCenter([data.countryInfo.lat , data.countryInfo.long]);
+        setMapZoom (4);
     })
   } ;
   return (
@@ -93,7 +100,10 @@ getCountriesData();
      </div>
      
 
-    <Map />
+    <Map
+    center = {mapCenter}
+    zoom= {mapZoom} 
+    />
        
     </div>
     <Card className="app_right">
@@ -101,6 +111,7 @@ getCountriesData();
             <h3>Live cases by country </h3>
             <Table countries = {tableData} />
             <h3> WorldWide new cases</h3>
+            <LineGraph />
           </CardContent>
     </Card>
       </div>
